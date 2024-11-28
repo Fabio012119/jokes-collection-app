@@ -1,9 +1,13 @@
 <template>
-  <div>HELLO WORLD</div>
+  <joke-discovery />
 </template>
 <script>
+import JokeDiscovery from "./JokeDiscovery.vue";
 export default {
   name: "MainComponent",
+  components: {
+    JokeDiscovery,
+  },
 };
 </script>
 
