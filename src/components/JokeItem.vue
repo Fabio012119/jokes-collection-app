@@ -1,6 +1,6 @@
 <template>
   <li
-    class="mb-4 bg-gray-100 rounded shadow p-5 list-none flex items-center justify-center"
+    class="mb-4 bg-gray-100 rounded shadow p-5 list-none flex flex-col items-center justify-center"
   >
     <p>{{ joke.setup }}</p>
     <button
