@@ -3,7 +3,7 @@
 ## Clone the app
 
 ```
-https://github.com/Fabio012119/jokes-collection-app.git
+git clone https://github.com/Fabio012119/jokes-collection-app.git
 ```
 
 ## Project setup
