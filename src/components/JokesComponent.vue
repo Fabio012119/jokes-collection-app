@@ -1,8 +1,16 @@
 <template>
   <div class="p-4 flex flex-col items-center">
-    <h1 class="text-2xl font-bold mb-4">Joke Discovery</h1>
+    <h1 class="text-2xl font-bold mb-4">
+      {{ isFavorites ? "Favorites" : "Joke Discovery" }}
+    </h1>
 
-    <div>
+    <router-link
+      :to="isFavorites ? '/' : '/favorites'"
+      class="px-4 py-2 bg-purple-500 text-white rounded mb-4"
+    >
+      {{ isFavorites ? "Go to Joke Discovery" : "Go to Favorites" }}
+    </router-link>
+    <div v-if="!isFavorites">
       <button
         @click="toggleCategory"
         class="px-4 py-2 bg-blue-500 text-white rounded mr-2"
@@ -38,6 +46,7 @@
         ></joke-item>
       </ul>
       <button
+        v-if="!isFavorites"
         @click="fetchJokes"
         class="mt-4 px-4 py-2 bg-green-500 text-white rounded w-max"
       >
@@ -62,12 +71,18 @@ import JokeItem from "./JokeItem/JokeItem.vue";
 import PunchLineReveal from "./JokeItem/PunchLineReveal.vue";
 
 export default {
-  name: "JokeDiscovery",
+  name: "JokesComponent",
   components: {
     JokeItem,
     PunchLineReveal,
   },
-  setup() {
+  props: {
+    isFavorites: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  setup(props) {
     const jokes = ref([]);
     const loading = ref(false);
     const error = ref(null);
@@ -77,6 +92,11 @@ export default {
     const modalPunchline = ref("");
 
     const fetchJokes = async () => {
+      if (props.isFavorites) {
+        getFavoriteJokes();
+        return;
+      }
+
       loading.value = true;
       error.value = null;
 
@@ -104,6 +124,13 @@ export default {
       }
     };
 
+    const getFavoriteJokes = () => {
+      const savedJokes = JSON.parse(
+        localStorage.getItem(savedJokesKey) || "[]"
+      );
+      jokes.value = savedJokes;
+    };
+
     const revealPunchline = (index) => {
       modalPunchline.value = jokes.value[index].punchline;
       modalVisible.value = true;
@@ -114,22 +141,27 @@ export default {
     };
 
     const toggleCategory = () => {
-      category.value = category.value === "Any" ? "Programming" : "Any";
-      fetchJokes();
+      if (!props.isFavorites) {
+        category.value = category.value === "Any" ? "Programming" : "Any";
+        fetchJokes();
+      }
     };
 
     const saveJoke = (joke) => {
-      const savedJokes = JSON.parse(localStorage.getItem(savedJokesKey)) || [];
+      const savedJokes = JSON.parse(
+        localStorage.getItem(savedJokesKey) || "[]"
+      );
       if (!savedJokes.some((savedJoke) => savedJoke.setup === joke.setup)) {
         savedJokes.push({ ...joke, rating: 0 });
         localStorage.setItem(savedJokesKey, JSON.stringify(savedJokes));
       }
     };
 
-    fetchJokes();
-
-    //console.log(localStorage);
-    //localStorage.clear();
+    if (props.isFavorites) {
+      getFavoriteJokes();
+    } else {
+      fetchJokes();
+    }
 
     return {
       jokes,

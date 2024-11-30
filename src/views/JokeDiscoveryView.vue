@@ -1,14 +1,14 @@
 <template>
-  <JokeDiscovery />
+  <jokes-component :isFavorites="false" />
 </template>
 
 <script lang="ts">
-import JokeDiscovery from "@/components/JokeDiscovery.vue";
+import JokesComponent from "@/components/JokesComponent.vue";
 
 export default {
-  name: "HomeView",
+  name: "JokeDiscoveryView",
   components: {
-    JokeDiscovery,
+    JokesComponent,
   },
 };
 </script>
