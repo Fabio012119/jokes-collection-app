@@ -76,11 +76,13 @@ export default {
           throw new Error(data.message);
         }
 
-        jokes.value = data.jokes.map((joke) => ({
-          setup: joke.type === "twopart" ? joke.setup : joke.joke,
-          punchline: joke.type === "twopart" ? joke.delivery : "",
-          revealed: false,
-        }));
+        jokes.value = data.jokes
+          .map((joke) => ({
+            setup: joke.type === "twopart" ? joke.setup : joke.joke,
+            punchline: joke.type === "twopart" ? joke.delivery : "",
+            revealed: false,
+          }))
+          .filter((joke) => joke.setup.length <= 85);
       } catch (err) {
         error.value = "Oops! Unable to fetch jokes. Please try again later.";
       } finally {
