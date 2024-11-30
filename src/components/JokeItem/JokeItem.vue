@@ -4,7 +4,6 @@
   >
     <div class="flex flex-col items-center">
       <p>{{ joke.setup }}</p>
-
       <button
         v-if="joke.punchline"
         @click="() => onReveal(index)"
