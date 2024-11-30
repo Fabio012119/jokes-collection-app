@@ -10,7 +10,7 @@
     >
       {{ isFavorites ? "Go to Joke Discovery" : "Go to Favorites" }}
     </router-link>
-    
+
     <div v-if="!isFavorites">
       <button
         @click="toggleCategory"

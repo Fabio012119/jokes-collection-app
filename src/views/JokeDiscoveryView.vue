@@ -26,10 +26,12 @@ const fetchJokes = async (newCategory) => {
 
     if (data.error) throw new Error(data.message);
 
-    jokes.value = data.jokes.map((joke) => ({
-      setup: joke.type === "twopart" ? joke.setup : joke.joke,
-      punchline: joke.type === "twopart" ? joke.delivery : "",
-    }));
+    jokes.value = data.jokes
+      .map((joke) => ({
+        setup: joke.type === "twopart" ? joke.setup : joke.joke,
+        punchline: joke.type === "twopart" ? joke.delivery : "",
+      }))
+      .filter((joke) => joke.setup.length <= 250);
   } catch (err) {
     console.error("Failed to fetch jokes:", err.message);
   } finally {
