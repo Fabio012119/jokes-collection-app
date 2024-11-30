@@ -43,12 +43,12 @@
           :index="index"
           :onReveal="revealPunchline"
           :onSave="saveJoke"
-        ></joke-item>
+        />
       </ul>
       <button
         v-if="!isFavorites"
-        @click="fetchJokes"
-        class="mt-4 px-4 py-2 bg-green-500 text-white rounded w-max"
+        @click="fetchMoreJokes"
+        class="mt-4 px-4 py-2 bg-green-500 text-white rounded"
       >
         Fetch More Jokes
       </button>
@@ -81,58 +81,27 @@ export default {
       type: Boolean,
       required: true,
     },
+    jokes: {
+      type: Array,
+      required: true,
+    },
   },
-  setup(props) {
-    const jokes = ref([]);
-    const loading = ref(false);
-    const error = ref(null);
-    const category = ref("Any");
-    const savedJokesKey = "savedJokes";
+  setup(props, { emit }) {
     const modalVisible = ref(false);
     const modalPunchline = ref("");
+    const category = ref("Any");
 
-    const fetchJokes = async () => {
-      if (props.isFavorites) {
-        getFavoriteJokes();
-        return;
-      }
-
-      loading.value = true;
-      error.value = null;
-
-      try {
-        const response = await fetch(
-          `https://v2.jokeapi.dev/joke/${category.value}?amount=10`
-        );
-        const data = await response.json();
-
-        if (data.error) {
-          throw new Error(data.message);
-        }
-
-        jokes.value = data.jokes
-          .map((joke) => ({
-            setup: joke.type === "twopart" ? joke.setup : joke.joke,
-            punchline: joke.type === "twopart" ? joke.delivery : "",
-            revealed: false,
-          }))
-          .filter((joke) => joke.setup.length <= 150);
-      } catch (err) {
-        error.value = "Oops! Unable to fetch jokes. Please try again later.";
-      } finally {
-        loading.value = false;
-      }
+    const fetchMoreJokes = () => {
+      emit("fetchMoreJokes", category.value);
     };
 
-    const getFavoriteJokes = () => {
-      const savedJokes = JSON.parse(
-        localStorage.getItem(savedJokesKey) || "[]"
-      );
-      jokes.value = savedJokes;
+    const toggleCategory = () => {
+      category.value = category.value === "Any" ? "Programming" : "Any";
+      emit("toggleCategory", category.value);
     };
 
     const revealPunchline = (index) => {
-      modalPunchline.value = jokes.value[index].punchline;
+      modalPunchline.value = props.jokes[index].punchline;
       modalVisible.value = true;
     };
 
@@ -140,41 +109,24 @@ export default {
       modalVisible.value = false;
     };
 
-    const toggleCategory = () => {
-      if (!props.isFavorites) {
-        category.value = category.value === "Any" ? "Programming" : "Any";
-        fetchJokes();
-      }
-    };
-
     const saveJoke = (joke) => {
-      const savedJokes = JSON.parse(
-        localStorage.getItem(savedJokesKey) || "[]"
-      );
-      if (!savedJokes.some((savedJoke) => savedJoke.setup === joke.setup)) {
-        savedJokes.push({ ...joke, rating: 0 });
-        localStorage.setItem(savedJokesKey, JSON.stringify(savedJokes));
+      const savedJokes = JSON.parse(localStorage.getItem("savedJokes") || "[]");
+
+      if (!savedJokes.some((saved) => saved.setup === joke.setup)) {
+        savedJokes.push(joke);
+        localStorage.setItem("savedJokes", JSON.stringify(savedJokes));
       }
     };
-
-    if (props.isFavorites) {
-      getFavoriteJokes();
-    } else {
-      fetchJokes();
-    }
 
     return {
-      jokes,
-      saveJoke,
-      loading,
-      error,
-      category,
-      fetchJokes,
-      revealPunchline,
-      toggleCategory,
       modalVisible,
       modalPunchline,
+      category,
+      fetchMoreJokes,
+      toggleCategory,
+      revealPunchline,
       closeModal,
+      saveJoke,
     };
   },
 };
