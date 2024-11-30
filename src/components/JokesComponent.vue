@@ -44,6 +44,7 @@
           :index="index"
           :onReveal="revealPunchline"
           :onSave="saveJoke"
+          :isFavorites="isFavorites"
         />
       </ul>
       <button

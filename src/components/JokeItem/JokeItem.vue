@@ -12,14 +12,21 @@
         Reveal Punchline
       </button>
       <p v-else class="mt-2 font-medium text-gray-700">{{ joke.punchline }}</p>
-
-      <button
-        v-if="!isSaved"
-        @click="saveJoke"
-        class="mt-2 px-3 py-1 bg-red-500 text-white rounded"
-      >
-        Save
-      </button>
+      <div>
+        <button
+          @click="isSaved ? removeJoke() : saveJoke()"
+          class="mt-2 px-3 py-1 rounded"
+          :class="isSaved ? 'bg-gray-500 text-white' : 'bg-red-500 text-white'"
+        >
+          {{ isSaved ? "Remove" : "Save" }}
+        </button>
+        <span
+          v-if="isSaved && !isFavorites"
+          class="text-white bg-yellow-400 mt-2 px-3 py-1 rounded"
+        >
+          ✓
+        </span>
+      </div>
     </div>
   </li>
 </template>
@@ -44,12 +51,17 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  isFavorites: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 const isSaved = ref(false);
 
+const savedJokes = JSON.parse(localStorage.getItem("savedJokes")) || [];
+
 const checkIfSaved = () => {
-  const savedJokes = JSON.parse(localStorage.getItem("savedJokes")) || [];
   isSaved.value = savedJokes.some(
     (savedJoke) => savedJoke.setup === props.joke.setup
   );
@@ -58,6 +70,14 @@ const checkIfSaved = () => {
 const saveJoke = () => {
   props.onSave(props.joke);
   isSaved.value = true;
+};
+
+const removeJoke = () => {
+  const updatedJokes = savedJokes.filter(
+    (savedJoke) => savedJoke.setup !== props.joke.setup
+  );
+  localStorage.setItem("savedJokes", JSON.stringify(updatedJokes));
+  isSaved.value = false;
 };
 
 checkIfSaved();
