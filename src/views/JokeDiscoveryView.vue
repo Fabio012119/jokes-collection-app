@@ -3,6 +3,7 @@
     :isFavorites="false"
     :jokes="jokes"
     :loading="loading"
+    :error="error"
     @fetchMoreJokes="fetchJokes"
     @toggleCategory="toggleCategory"
   />
@@ -14,6 +15,7 @@ import JokesComponent from "@/components/JokesComponent.vue";
 
 const jokes = ref([]);
 const loading = ref(false);
+let error = "";
 const category = ref("Any");
 
 const fetchJokes = async (newCategory) => {
@@ -34,6 +36,7 @@ const fetchJokes = async (newCategory) => {
       .filter((joke) => joke.setup.length <= 250);
   } catch (err) {
     console.error("Failed to fetch jokes:", err.message);
+    error = "Oops there was an error please try again later.";
   } finally {
     loading.value = false;
   }
