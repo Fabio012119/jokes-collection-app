@@ -24,9 +24,9 @@
       ⚠️ {{ error }}
     </div>
 
-    <div v-else class="mt-4 flex flex-col items-center">
+    <div v-else class="mt-[3rem] flex flex-col items-center">
       <ul
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 w-full max-w-6xl"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-5 gap-5 w-full max-w-6xl"
       >
         <joke-item
           v-for="(joke, index) in jokes"
@@ -34,6 +34,7 @@
           :joke="joke"
           :index="index"
           :onReveal="revealPunchline"
+          class=""
         ></joke-item>
       </ul>
       <button
