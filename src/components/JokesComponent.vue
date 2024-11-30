@@ -65,69 +65,60 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
 import JokeItem from "./JokeItem/JokeItem.vue";
 import PunchLineReveal from "./JokeItem/PunchLineReveal.vue";
 
-export default {
-  name: "JokesComponent",
-  components: {
-    JokeItem,
-    PunchLineReveal,
+const props = defineProps({
+  isFavorites: {
+    type: Boolean,
+    required: true,
   },
-  props: {
-    isFavorites: {
-      type: Boolean,
-      required: true,
-    },
-    jokes: {
-      type: Array,
-      required: true,
-    },
+  jokes: {
+    type: Array,
+    required: true,
   },
-  setup(props, { emit }) {
-    const modalVisible = ref(false);
-    const modalPunchline = ref("");
-    const category = ref("Any");
-
-    const fetchMoreJokes = () => {
-      emit("fetchMoreJokes", category.value);
-    };
-
-    const toggleCategory = () => {
-      category.value = category.value === "Any" ? "Programming" : "Any";
-      emit("toggleCategory", category.value);
-    };
-
-    const revealPunchline = (index) => {
-      modalPunchline.value = props.jokes[index].punchline;
-      modalVisible.value = true;
-    };
-
-    const closeModal = () => {
-      modalVisible.value = false;
-    };
-
-    const saveJoke = (joke) => {
-      const savedJokes = JSON.parse(localStorage.getItem("savedJokes") || "[]");
-
-      if (!savedJokes.some((saved) => saved.setup === joke.setup)) {
-        savedJokes.push(joke);
-        localStorage.setItem("savedJokes", JSON.stringify(savedJokes));
-      }
-    };
-
-    return {
-      modalVisible,
-      modalPunchline,
-      category,
-      fetchMoreJokes,
-      toggleCategory,
-      revealPunchline,
-      closeModal,
-      saveJoke,
-    };
+  loading: {
+    type: Boolean,
+    required: true,
   },
+  error: {
+    type: String,
+    default: null,
+  },
+});
+
+const emit = defineEmits(["fetchMoreJokes", "toggleCategory"]);
+
+const modalVisible = ref(false);
+const modalPunchline = ref("");
+const category = ref("Any");
+
+const fetchMoreJokes = () => {
+  emit("fetchMoreJokes", category.value);
+};
+
+const toggleCategory = () => {
+  category.value = category.value === "Any" ? "Programming" : "Any";
+  emit("toggleCategory", category.value);
+};
+
+const revealPunchline = (index) => {
+  modalPunchline.value = props.jokes[index].punchline;
+  modalVisible.value = true;
+};
+
+const closeModal = () => {
+  modalVisible.value = false;
+};
+
+const saveJoke = (joke) => {
+  const savedJokes = JSON.parse(localStorage.getItem("savedJokes") || "[]");
+
+  if (!savedJokes.some((saved) => saved.setup === joke.setup)) {
+    savedJokes.push(joke);
+    localStorage.setItem("savedJokes", JSON.stringify(savedJokes));
+  }
 };
 </script>
