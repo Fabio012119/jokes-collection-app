@@ -110,7 +110,7 @@ export default {
 
     fetchJokes();
 
-    console.log(localStorage);
+    //console.log(localStorage);
     //localStorage.clear();
 
     return {
