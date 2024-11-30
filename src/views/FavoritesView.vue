@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <jokes-component :isFavorites="true" :jokes="jokes" />
-  </div>
+  <jokes-component :isFavorites="true" :jokes="jokes" />
 </template>
 
 <script>

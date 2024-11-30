@@ -1,12 +1,10 @@
 <template>
-  <div>
     <jokes-component
       :isFavorites="false"
       :jokes="jokes"
       @fetchMoreJokes="fetchJokes"
       @toggleCategory="changeCategory"
     />
-  </div>
 </template>
 
 <script>
