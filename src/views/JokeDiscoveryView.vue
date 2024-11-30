@@ -42,6 +42,5 @@ const toggleCategory = (newCategory) => {
   fetchJokes(newCategory);
 };
 
-// Initial jokes
 fetchJokes();
 </script>

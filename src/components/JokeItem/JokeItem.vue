@@ -6,7 +6,7 @@
       <p>{{ joke.setup }}</p>
 
       <button
-        v-if="!joke.revealed"
+        v-if="joke.punchline"
         @click="() => onReveal(index)"
         class="mt-2 px-3 py-1 bg-green-500 text-white rounded"
       >
