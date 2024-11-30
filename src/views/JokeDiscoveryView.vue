@@ -1,17 +1,15 @@
 <template>
-  <div class="home">
-    <MainComponent />
-  </div>
+  <JokeDiscovery />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import MainComponent from "@/components/Main.vue";
+import JokeDiscovery from "@/components/JokeDiscovery.vue";
 
 export default defineComponent({
   name: "HomeView",
   components: {
-    MainComponent,
+    JokeDiscovery,
   },
 });
 </script>
