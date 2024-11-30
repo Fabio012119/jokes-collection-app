@@ -34,7 +34,7 @@
           :joke="joke"
           :index="index"
           :onReveal="revealPunchline"
-          class=""
+          :onSave="saveJoke"
         ></joke-item>
       </ul>
       <button
@@ -61,6 +61,7 @@ export default {
     const loading = ref(false);
     const error = ref(null);
     const category = ref("Any");
+    const savedJokesKey = "savedJokes";
 
     const fetchJokes = async () => {
       loading.value = true;
@@ -99,10 +100,22 @@ export default {
       fetchJokes();
     };
 
+    const saveJoke = (joke) => {
+      const savedJokes = JSON.parse(localStorage.getItem(savedJokesKey)) || [];
+      if (!savedJokes.some((savedJoke) => savedJoke.setup === joke.setup)) {
+        savedJokes.push({ ...joke, rating: 0 });
+        localStorage.setItem(savedJokesKey, JSON.stringify(savedJokes));
+      }
+    };
+
     fetchJokes();
+
+    console.log(localStorage);
+    //localStorage.clear();
 
     return {
       jokes,
+      saveJoke,
       loading,
       error,
       category,
