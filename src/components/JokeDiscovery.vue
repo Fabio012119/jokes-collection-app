@@ -44,17 +44,28 @@
         Fetch More Jokes
       </button>
     </div>
+
+    <punch-line-reveal
+      v-if="modalVisible"
+      :visible="modalVisible"
+      @close="closeModal"
+    >
+      <h2 class="text-xl font-bold mb-4">Punchline</h2>
+      <p class="text-lg">{{ modalPunchline }}</p>
+    </punch-line-reveal>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import JokeItem from "./JokeItem";
+import JokeItem from "./JokeItem/JokeItem.vue";
+import PunchLineReveal from "./JokeItem/PunchLineReveal.vue";
 
 export default {
   name: "JokeDiscovery",
   components: {
     JokeItem,
+    PunchLineReveal,
   },
   setup() {
     const jokes = ref([]);
@@ -62,6 +73,8 @@ export default {
     const error = ref(null);
     const category = ref("Any");
     const savedJokesKey = "savedJokes";
+    const modalVisible = ref(false);
+    const modalPunchline = ref("");
 
     const fetchJokes = async () => {
       loading.value = true;
@@ -83,7 +96,7 @@ export default {
             punchline: joke.type === "twopart" ? joke.delivery : "",
             revealed: false,
           }))
-          .filter((joke) => joke.setup.length <= 85);
+          .filter((joke) => joke.setup.length <= 150);
       } catch (err) {
         error.value = "Oops! Unable to fetch jokes. Please try again later.";
       } finally {
@@ -92,7 +105,12 @@ export default {
     };
 
     const revealPunchline = (index) => {
-      jokes.value[index].revealed = true;
+      modalPunchline.value = jokes.value[index].punchline;
+      modalVisible.value = true;
+    };
+
+    const closeModal = () => {
+      modalVisible.value = false;
     };
 
     const toggleCategory = () => {
@@ -122,6 +140,9 @@ export default {
       fetchJokes,
       revealPunchline,
       toggleCategory,
+      modalVisible,
+      modalPunchline,
+      closeModal,
     };
   },
 };
