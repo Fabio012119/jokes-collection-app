@@ -137,5 +137,5 @@ const updateJokeRating = (index, rating) => {
   emit("updateJokeRating", jokesCopy.value[index]);
 };
 
-localStorage.clear();
+//localStorage.clear();
 </script>
