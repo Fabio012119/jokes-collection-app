@@ -36,6 +36,14 @@ npm run test:unit
 npm run lint
 ```
 
+### To run tests
+
+```
+npm run test
+```
+
+Then follow the instructions to run either all the tests at once or just one at a time
+
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
