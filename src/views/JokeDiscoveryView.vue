@@ -1,12 +1,14 @@
 <template>
-  <jokes-component
-    :isFavorites="false"
-    :jokes="jokes"
-    :loading="loading"
-    :error="error"
-    @fetchMoreJokes="fetchJokes"
-    @toggleCategory="toggleCategory"
-  />
+  <div data-testid="joke-discovery-view">
+    <jokes-component
+      :isFavorites="false"
+      :jokes="jokes"
+      :loading="loading"
+      :error="error"
+      @fetchMoreJokes="fetchJokes"
+      @toggleCategory="toggleCategory"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 flex flex-col items-center">
+  <div class="p-4 flex flex-col items-center" data-testid="jokes-component">
     <h1 class="text-2xl font-bold mb-4">
       {{ isFavorites ? "Favorites" : "Joke Discovery" }}
     </h1>

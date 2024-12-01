@@ -1,6 +1,7 @@
 <template>
   <li
     class="mb-4 bg-gray-100 rounded shadow p-5 list-none flex-col items-center justify-center"
+    data-testid="joke-item"
   >
     <div class="flex flex-col items-center">
       <p>{{ joke.setup }}</p>

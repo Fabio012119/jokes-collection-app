@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-[2rem]">
+  <div class="mt-[2rem]" data-testid="favorites-view">
     <input
       type="text"
       v-model="searchQuery"

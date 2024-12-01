@@ -1,5 +1,5 @@
 <template>
-  <transition class="animate-modal-slide-in">
+  <transition class="animate-modal-slide-in" data-testid="jokes-punchline">
     <div
       v-if="visible"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
