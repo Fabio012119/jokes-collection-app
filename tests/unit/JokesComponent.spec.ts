@@ -25,6 +25,13 @@ describe("JokesComponent", () => {
 
     const wrapper = mount(JokesComponent, {
       props,
+      global: {
+        stubs: {
+          "router-link": {
+            template: "<a><slot /></a>",
+          },
+        },
+      },
     });
 
     const favoritesView = wrapper.find('[data-testid="jokes-component"]');
