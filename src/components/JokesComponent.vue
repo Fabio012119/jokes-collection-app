@@ -44,9 +44,11 @@
           :index="index"
           :onReveal="revealPunchline"
           :onSave="saveJoke"
+          :onRate="updateJokeRating"
           :isFavorites="isFavorites"
         />
       </ul>
+
       <button
         v-if="!isFavorites"
         @click="fetchMoreJokes"
@@ -91,7 +93,11 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["fetchMoreJokes", "toggleCategory"]);
+const emit = defineEmits([
+  "fetchMoreJokes",
+  "toggleCategory",
+  "updateJokeRating",
+]);
 
 const modalVisible = ref(false);
 const modalPunchline = ref("");
@@ -123,4 +129,13 @@ const saveJoke = (joke) => {
     localStorage.setItem("savedJokes", JSON.stringify(savedJokes));
   }
 };
+
+const jokesCopy = ref([...props.jokes]);
+
+const updateJokeRating = (index, rating) => {
+  jokesCopy.value[index].rating = rating;
+  emit("updateJokeRating", jokesCopy.value[index]);
+};
+
+localStorage.clear();
 </script>

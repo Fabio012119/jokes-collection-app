@@ -27,6 +27,21 @@
           ✓
         </span>
       </div>
+
+      <div class="mt-4 flex items-center" v-if="isFavorites">
+        <p class="mr-2">Rate this joke:</p>
+        <div class="flex">
+          <span
+            v-for="star in 5"
+            :key="star"
+            @click="rateJoke(star)"
+            class="cursor-pointer text-2xl"
+            :class="star <= currentRating ? 'text-yellow-500' : 'text-gray-300'"
+          >
+            ★
+          </span>
+        </div>
+      </div>
     </div>
   </li>
 </template>
@@ -47,6 +62,10 @@ const props = defineProps({
     type: Function,
     required: true,
   },
+  onRate: {
+    type: Function,
+    required: true,
+  },
   index: {
     type: Number,
     required: true,
@@ -58,6 +77,7 @@ const props = defineProps({
 });
 
 const isSaved = ref(false);
+const currentRating = ref(props.joke.rating || 0);
 
 const savedJokes = JSON.parse(localStorage.getItem("savedJokes")) || [];
 
@@ -78,6 +98,11 @@ const removeJoke = () => {
   );
   localStorage.setItem("savedJokes", JSON.stringify(updatedJokes));
   isSaved.value = false;
+};
+
+const rateJoke = (rating) => {
+  currentRating.value = rating;
+  props.onRate(props.index, rating);
 };
 
 checkIfSaved();
