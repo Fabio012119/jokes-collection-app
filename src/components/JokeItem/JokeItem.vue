@@ -30,7 +30,7 @@
       </div>
 
       <div class="mt-4 flex items-center" v-if="isFavorites">
-        <p class="mr-2">Rate this joke:</p>
+        <p class="mr-2 w-max text-sm">Rate this joke:</p>
         <div class="flex">
           <span
             v-for="star in 5"
