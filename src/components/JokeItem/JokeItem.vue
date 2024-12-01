@@ -46,38 +46,14 @@
   </li>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
+import type { JokeItemProps, Joke } from "@/types";
 
-const props = defineProps({
-  joke: {
-    type: Object,
-    required: true,
-  },
-  onReveal: {
-    type: Function,
-    required: true,
-  },
-  onSave: {
-    type: Function,
-    required: true,
-  },
-  onRate: {
-    type: Function,
-    required: true,
-  },
-  index: {
-    type: Number,
-    required: true,
-  },
-  isFavorites: {
-    type: Boolean,
-    required: true,
-  },
-});
+const props = defineProps<JokeItemProps>();
 
 const isSaved = ref(false);
-const currentRating = ref(props.joke.rating || 0);
+const currentRating = ref<number>(props.joke.rating || 0);
 
 watch(
   () => props.joke.rating,
@@ -86,7 +62,9 @@ watch(
   }
 );
 
-const savedJokes = JSON.parse(localStorage.getItem("savedJokes")) || [];
+const savedJokes: Joke[] = JSON.parse(
+  localStorage.getItem("savedJokes") || "[]"
+);
 
 const checkIfSaved = () => {
   isSaved.value = savedJokes.some(
@@ -107,7 +85,7 @@ const removeJoke = () => {
   isSaved.value = false;
 };
 
-const rateJoke = (rating) => {
+const rateJoke = (rating: number) => {
   currentRating.value = rating;
   props.onRate(props.index, rating);
 };

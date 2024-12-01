@@ -9,16 +9,17 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import JokesComponent from "@/components/JokesComponent.vue";
+import type { JokeApiResponse, Joke } from "@/types";
 
-const jokes = ref([]);
-const loading = ref(false);
-let error = "";
-const category = ref("Any");
+const jokes = ref<Joke[]>([]);
+const loading = ref<boolean>(false);
+const error = ref<string>("");
+const category = ref<string>("Any");
 
-const fetchJokes = async (newCategory) => {
+const fetchJokes = async (newCategory?: string): Promise<void> => {
   loading.value = true;
   try {
     const response = await fetch(
@@ -29,20 +30,20 @@ const fetchJokes = async (newCategory) => {
     if (data.error) throw new Error(data.message);
 
     jokes.value = data.jokes
-      .map((joke) => ({
-        setup: joke.type === "twopart" ? joke.setup : joke.joke,
-        punchline: joke.type === "twopart" ? joke.delivery : "",
+      .map((joke: JokeApiResponse) => ({
+        setup: joke.type === "twopart" ? joke.setup || "" : joke.joke || "",
+        punchline: joke.type === "twopart" ? joke.delivery || "" : "",
       }))
-      .filter((joke) => joke.setup.length <= 250);
-  } catch (err) {
-    console.error("Failed to fetch jokes:", err.message);
-    error = "Oops there was an error please try again later.";
+      .filter((joke: Joke) => joke.setup.length <= 250);
+  } catch (err: unknown) {
+    console.error("Failed to fetch jokes:", (err as Error).message);
+    error.value = "Oops there was an error, please try again later.";
   } finally {
     loading.value = false;
   }
 };
 
-const toggleCategory = (newCategory) => {
+const toggleCategory = (newCategory: string): void => {
   category.value = newCategory;
   fetchJokes(newCategory);
 };

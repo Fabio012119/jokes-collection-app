@@ -38,21 +38,26 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import JokesComponent from "@/components/JokesComponent.vue";
+import type { Joke } from "@/types";
 
-const jokes = ref(JSON.parse(localStorage.getItem("savedJokes") || "[]"));
-const error = computed(() =>
+const jokes = ref<Joke[]>(
+  JSON.parse(localStorage.getItem("savedJokes") || "[]")
+);
+
+const error = computed((): string | null =>
   jokes.value.length === 0 ? "Add some favorite jokes" : null
 );
 
-const searchQuery = ref("");
-const sortOption = ref("alphabetically");
-const filterRating = ref("");
+const searchQuery = ref<string>("");
+const sortOption = ref<"alphabetically" | "rating">("alphabetically");
+const filterRating = ref<string>("");
 
-const totalJokes = computed(() => jokes.value.length);
-const averageRating = computed(() => {
+const totalJokes = computed((): number => jokes.value.length);
+
+const averageRating = computed((): string => {
   const totalRatings = jokes.value.reduce(
     (sum, joke) => sum + (joke.rating || 0),
     0
@@ -62,7 +67,7 @@ const averageRating = computed(() => {
     : "N/A";
 });
 
-const filteredJokes = computed(() => {
+const filteredJokes = computed((): Joke[] => {
   let result = jokes.value;
 
   if (searchQuery.value) {
@@ -86,7 +91,7 @@ const filteredJokes = computed(() => {
   return result;
 });
 
-const handleJokeRatingUpdate = (updatedJoke) => {
+const handleJokeRatingUpdate = (updatedJoke: Joke) => {
   const index = jokes.value.findIndex(
     (joke) => joke.setup === updatedJoke.setup
   );

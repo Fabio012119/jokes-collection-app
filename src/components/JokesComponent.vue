@@ -69,39 +69,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import JokeItem from "./JokeItem/JokeItem.vue";
 import PunchLineReveal from "./JokeItem/PunchLineReveal.vue";
+import type { Joke, JokesComponentProps, JokesComponentEmits } from "@/types";
 
-const props = defineProps({
-  isFavorites: {
-    type: Boolean,
-    required: true,
-  },
-  jokes: {
-    type: Array,
-    required: true,
-  },
-  loading: {
-    type: Boolean,
-    required: true,
-  },
-  error: {
-    type: String,
-    default: null,
-  },
-});
+const props = defineProps<JokesComponentProps>();
 
-const emit = defineEmits([
-  "fetchMoreJokes",
-  "toggleCategory",
-  "updateJokeRating",
-]);
+const emit = defineEmits<JokesComponentEmits>();
 
 const modalVisible = ref(false);
-const modalPunchline = ref("");
-const category = ref("Any");
+const modalPunchline = ref<string>("");
+const category = ref<string>("Any");
 
 const fetchMoreJokes = () => {
   emit("fetchMoreJokes", category.value);
@@ -112,8 +92,8 @@ const toggleCategory = () => {
   emit("toggleCategory", category.value);
 };
 
-const revealPunchline = (index) => {
-  modalPunchline.value = props.jokes[index].punchline;
+const revealPunchline = (index: number) => {
+  modalPunchline.value = props.jokes[index]?.punchline || "";
   modalVisible.value = true;
 };
 
@@ -121,8 +101,10 @@ const closeModal = () => {
   modalVisible.value = false;
 };
 
-const saveJoke = (joke) => {
-  const savedJokes = JSON.parse(localStorage.getItem("savedJokes") || "[]");
+const saveJoke = (joke: Joke) => {
+  const savedJokes: Joke[] = JSON.parse(
+    localStorage.getItem("savedJokes") || "[]"
+  );
 
   if (!savedJokes.some((saved) => saved.setup === joke.setup)) {
     savedJokes.push(joke);
@@ -130,12 +112,10 @@ const saveJoke = (joke) => {
   }
 };
 
-const jokesCopy = ref([...props.jokes]);
+const jokesCopy = ref<Joke[]>([...props.jokes]);
 
-const updateJokeRating = (index, rating) => {
+const updateJokeRating = (index: number, rating: number) => {
   jokesCopy.value[index].rating = rating;
   emit("updateJokeRating", jokesCopy.value[index]);
 };
-
-//localStorage.clear();
 </script>

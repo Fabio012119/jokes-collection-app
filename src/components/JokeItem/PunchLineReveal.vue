@@ -20,15 +20,15 @@
   </transition>
 </template>
 
-<script setup>
-defineProps({
-  visible: {
-    type: Boolean,
-    required: true,
-  },
-});
+<script setup lang="ts">
 
-const emit = defineEmits(["close"]);
+defineProps<{
+  visible: boolean;
+}>();
+
+const emit = defineEmits<{
+  (event: "close"): void;
+}>();
 
 const closeModal = () => {
   emit("close");
