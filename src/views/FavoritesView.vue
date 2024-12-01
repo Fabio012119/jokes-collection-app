@@ -83,10 +83,6 @@ const filteredJokes = computed(() => {
     result = [...result].sort((a, b) => (b.rating || 0) - (a.rating || 0));
   }
 
-  console.log(
-    "Filtered jokes:",
-    result.map((joke) => ({ setup: joke.setup, rating: joke.rating }))
-  );
   return result;
 });
 
