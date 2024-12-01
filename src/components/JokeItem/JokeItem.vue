@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const props = defineProps({
   joke: {
@@ -78,6 +78,13 @@ const props = defineProps({
 
 const isSaved = ref(false);
 const currentRating = ref(props.joke.rating || 0);
+
+watch(
+  () => props.joke.rating,
+  (newRating) => {
+    currentRating.value = newRating || 0;
+  }
+);
 
 const savedJokes = JSON.parse(localStorage.getItem("savedJokes")) || [];
 

@@ -80,9 +80,13 @@ const filteredJokes = computed(() => {
   if (sortOption.value === "alphabetically") {
     result = [...result].sort((a, b) => a.setup.localeCompare(b.setup));
   } else if (sortOption.value === "rating") {
-    result = [...result].sort((a, b) => (a.rating || 0) - (b.rating || 0));
+    result = [...result].sort((a, b) => (b.rating || 0) - (a.rating || 0));
   }
 
+  console.log(
+    "Filtered jokes:",
+    result.map((joke) => ({ setup: joke.setup, rating: joke.rating }))
+  );
   return result;
 });
 
